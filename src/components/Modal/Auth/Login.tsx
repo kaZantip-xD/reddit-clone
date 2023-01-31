@@ -1,27 +1,27 @@
-import { authModalState } from "@/src/atoms/AuthModalAtom"
-import { Button, Flex, Input, Text } from "@chakra-ui/react"
-import React, { useState } from "react"
-import { useSetRecoilState } from "recoil"
+import { authModalState } from "@/src/atoms/authModalAtom";
+import { Button, Flex, Input, Text } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { useSetRecoilState } from "recoil";
 
-type LoginProps = {}
+type LoginProps = {};
 
 const Login: React.FC<LoginProps> = () => {
-	const setAuthModalState = useSetRecoilState(authModalState)
+	const setAuthModalState = useSetRecoilState(authModalState);
 	const [loginForm, setLoginForm] = useState({
 		email: "",
 		password: "",
-	})
+	});
 
 	// Firebase authentication
-	const onSubmit = () => {}
+	const onSubmit = () => {};
 
 	const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		// update form state
 		setLoginForm((prev) => ({
 			...prev,
 			[event.target.name]: event.target.value,
-		}))
-	}
+		}));
+	};
 
 	return (
 		<form onSubmit={onSubmit}>
@@ -70,12 +70,21 @@ const Login: React.FC<LoginProps> = () => {
 				bg='gray.50'
 			/>
 
-			<Button width='100%' height='36px' mt={4} mb={2} type='submit'>
+			<Button
+				width='100%'
+				height='36px'
+				mt={4}
+				mb={2}
+				type='submit'
+			>
 				{" "}
 				Log In
 			</Button>
 
-			<Flex fontSize='9pt' justifyContent='center'>
+			<Flex
+				fontSize='9pt'
+				justifyContent='center'
+			>
 				<Text mr={1}>New on Reddit?</Text>
 				<Text
 					color='blue.500'
@@ -92,6 +101,6 @@ const Login: React.FC<LoginProps> = () => {
 				</Text>
 			</Flex>
 		</form>
-	)
-}
-export default Login
+	);
+};
+export default Login;

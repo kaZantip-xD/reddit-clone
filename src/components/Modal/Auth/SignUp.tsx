@@ -1,26 +1,42 @@
-import { authModalState } from "@/src/atoms/AuthModalAtom"
-import { Input, Button, Flex, Text } from "@chakra-ui/react"
-import React, { useState } from "react"
-import { useSetRecoilState } from "recoil"
+import React, { useState } from "react";
+import { Input, Button, Flex, Text } from "@chakra-ui/react";
+import { useSetRecoilState } from "recoil";
+import { authModalState } from "@/src/atoms/authModalAtom";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { auth } from "@/src/firebase/clientApp";
+import { FIREBASE_ERRORS } from "@/src/firebase/errors";
 
 const SignUp: React.FC = () => {
-	const setAuthModalState = useSetRecoilState(authModalState)
+	const setAuthModalState = useSetRecoilState(authModalState);
 	const [signUpForm, setSignUpForm] = useState({
 		email: "",
 		password: "",
 		confirmPassword: "",
-	})
+	});
+	const [error, setError] = useState("");
+	const [createUserWithEmailAndPassword, user, loading, userError] =
+		useCreateUserWithEmailAndPassword(auth);
 
 	// Firebase authentication
-	const onSubmit = () => {}
+	const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		if (error) setError("");
+		if (signUpForm.password !== signUpForm.confirmPassword) {
+			// set error message
+			setError("Password do not match!");
+			return;
+		}
+		// password match
+		createUserWithEmailAndPassword(signUpForm.email, signUpForm.password);
+	};
 
 	const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		// update form state
 		setSignUpForm((prev) => ({
 			...prev,
 			[event.target.name]: event.target.value,
-		}))
-	}
+		}));
+	};
 
 	return (
 		<form onSubmit={onSubmit}>
@@ -91,7 +107,18 @@ const SignUp: React.FC = () => {
 				bg='gray.50'
 			/>
 
-			<Button width='100%' height='36px' mt={4} mb={2} type='submit'>
+			<Text textAlign='center' color='red' fontSize='10pt'>
+				{error ||
+					FIREBASE_ERRORS[userError?.message as keyof typeof FIREBASE_ERRORS]}
+			</Text>
+			<Button
+				width='100%'
+				height='36px'
+				mt={4}
+				mb={2}
+				type='submit'
+				isLoading={loading}
+			>
 				{" "}
 				Sign Up
 			</Button>
@@ -113,6 +140,6 @@ const SignUp: React.FC = () => {
 				</Text>
 			</Flex>
 		</form>
-	)
-}
-export default SignUp
+	);
+};
+export default SignUp;
