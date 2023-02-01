@@ -31,7 +31,6 @@ const AuthModal: React.FC = () => {
 
 	useEffect(() => {
 		if (user) handleClose();
-		console.log("🚀 ~ file: AuthModal.tsx:35 ~ useEffect ~ user", user);
 	}, [user]);
 
 	return (
